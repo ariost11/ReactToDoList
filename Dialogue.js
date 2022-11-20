@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useState } from 'react';
 import { Button, Modal, Form} from 'react-bootstrap';
 
 export default class Dialogue extends React.Component {
@@ -11,16 +10,33 @@ export default class Dialogue extends React.Component {
       description: '',
       date: '',
       priority: '',
+      mode: this.props.name == 'ADD' ? 'Add' : 'Edit',
       complete: false
     }
     this.handleShow = this.handleShow.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
     this.handleAdd = this.handleAdd.bind(this);
+    this.loadTable = this.loadTable.bind(this);
+    this.handleOpen = this.handleOpen.bind(this);
+  }
+
+  loadTable() {
+    console.log(this.props.givenTuple);
+    this.setState({
+      description: this.props.givenTuple[1],
+      date: this.props.givenTuple[2],
+      priority: this.probs.givenTuple[3]
+    });
+  }
+
+  handleOpen() {
+    if(this.state.mode == 'Edit')
+      this.loadTable();
+    this.handleShow();
   }
 
   handleShow() {
-    console.log(this.state.list);
     this.setState({
       show: true
     });
@@ -37,21 +53,20 @@ export default class Dialogue extends React.Component {
   }
 
   handleAdd() {
-    this.props.updateList(this.state.title, this.state.description, this.state.date, this.state.priority);
-    handleClose();
-    console.log(this.props.list);
+    this.props.fn(this.state.title, this.state.description, this.state.date, this.state.priority);
+    this.handleClose();
   }
 
   render() {
     return(
       <div>
-        <Button variant="primary" onClick={this.handleShow}>
-          Add
+        <Button variant="primary" onClick={this.handleOpen}>
+          {this.props.name}
         </Button>
 
-        <Modal show={this.state.show} onHide={this.handleClose}>
+        <Modal show={this.state.show} onHide={() => this.handleClose}>
           <Modal.Header closeButton>
-            <Modal.Title>Add Task</Modal.Title>
+            <Modal.Title>{this.state.mode} Task</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form>
@@ -63,15 +78,15 @@ export default class Dialogue extends React.Component {
               </Form.Group>
               <Form.Group>
                 <Form.Text>Priority <br/></Form.Text>
-                <Form.Check inline name='priority' type={'radio'} label='Low' onChange={() => this.setState({priority: 'Low'})}/>
-                <Form.Check inline name='priority' type={'radio'} label='Med' onChange={() => this.setState({priority: 'Medium'})}/>
-                <Form.Check inline name='priority' type={'radio'} label='High' onChange={() => this.setState({priority: 'High'})}/>
+                <Form.Check inline name='priority' type='radio' label='Low' onChange={() => this.setState({priority: 'Low'})}/>
+                <Form.Check inline name='priority' type='radio' label='Med' onChange={() => this.setState({priority: 'Medium'})}/>
+                <Form.Check inline name='priority' type='radio' label='High' onChange={() => this.setState({priority: 'High'})}/>
               </Form.Group>
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="primary" onClick={this.handlesAdd}>
-              Add
+            <Button variant="primary" onClick={this.handleAdd}>
+              {this.state.mode}
             </Button>
             <Button variant="secondary" onClick={this.handleCancel}>
               Cancel
