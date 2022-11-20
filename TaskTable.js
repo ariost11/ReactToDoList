@@ -16,6 +16,7 @@ export default class TaskTable extends React.Component {
     };
     this.addToList = this.addToList.bind(this);
     this.updateEntry = this.updateEntry.bind(this);
+    this.deleteEntry = this.deleteEntry.bind(this);
   }
 
   addToList(title, description, date, priority) {
@@ -26,9 +27,14 @@ export default class TaskTable extends React.Component {
 
   updateEntry(title, description, date, priority, complete, index) {
     let newArr = [title, description, date, priority, complete, index];
-    console.log([...this.state.tuples.slice(index - 1), newArr, ...this.state.tuples.slice(index)]);
     this.setState({
-      tuples: this.state.tuples.splice(index, 1, newArr)
+      tuples: this.state.tuples.map(a => a[0] === title ? newArr : a)
+    });
+  }
+
+  deleteEntry(tuple) {
+    this.setState({
+      tuples: this.state.tuples.filter(item => item !== tuple)
     });
   }
 
@@ -44,7 +50,7 @@ export default class TaskTable extends React.Component {
         </Col>
         <Col sm md lg={{span: 2}}>
           <Dialogue name="UPDATE" givenTuple={tuple} fn={this.updateEntry}/>
-          <Button>DELETE</Button>
+          <Button onClick={() => this.deleteEntry(tuple)}>DELETE</Button>
         </Col>
       </Row>
     );
