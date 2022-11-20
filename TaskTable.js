@@ -6,6 +6,7 @@ import Dialogue from './Dialogue';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { Form, Button } from 'react-bootstrap';
+import moment from 'moment';
 
 export default class TaskTable extends React.Component {
   constructor(props) {
@@ -52,7 +53,7 @@ export default class TaskTable extends React.Component {
       <Row>
         <Col sm md lg={{span: 2}} id='colValue'>{tuple[0]}</Col>
         <Col sm md lg={{span: 2}} id='colValue'>{tuple[1]}</Col>
-        <Col sm md lg={{span: 2}} id='colValue'>{tuple[2]}</Col>
+        <Col sm md lg={{span: 2}} id='colValue'>{moment(tuple[2]).format('MM/DD/YYYY')}</Col>
         <Col sm md lg={{span: 2}} id='colValue'>{tuple[3]}</Col>
         <Col sm md lg={{span: 2}} id='colValue'>
           <Form.Check inline name='completed' type='checkbox' onChange={() => this.swapComplete(tuple)}/>

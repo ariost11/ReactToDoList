@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Button, Modal, Form} from 'react-bootstrap';
-import moment from 'moment';
 
 export default class Dialogue extends React.Component {
   constructor(props) {
@@ -25,28 +24,32 @@ export default class Dialogue extends React.Component {
   }
 
   updateDate(newDate) {
-    var time = moment(newDate.target.value).format('MM/DD/YYYY');
+    var time = newDate.target.value;
     this.setState({
       date: time
     });
+    console.log(this.state.date);
   }
 
   loadTable() {
     const ti = this.props.givenTuple[0];
     const desc = this.props.givenTuple[1];
-    const dt = this.props.givenTuple[2];
+    const newDate = this.props.givenTuple[2];
     const prio = this.props.givenTuple[3];
+    console.log(newDate);
     this.setState({
       title: ti,
       description: desc,
-      date: dt,
+      date: newDate,
       priority: prio
     });
+    console.log(this.state.date);
   }
 
   handleOpen() {
     if(this.state.mode == 'Edit')
       this.loadTable();
+
     this.handleShow();
   }
 
@@ -72,6 +75,7 @@ export default class Dialogue extends React.Component {
       this.props.fn(this.state.title, this.state.description, this.state.date, this.state.priority);
     else
       this.props.fn(this.state.title, this.state.description, this.state.data, this.state.priority, this.props.givenTuple.complete, this.props.givenTuple.index);
+
     this.handleClose();
     this.resetValues();
   }
@@ -87,7 +91,6 @@ export default class Dialogue extends React.Component {
   }
 
   render() {
-    
     let titleShow = <></>;
     if(this.state.mode == 'Add') {
       titleShow = 
@@ -104,7 +107,7 @@ export default class Dialogue extends React.Component {
         </Button>
 
         <Modal show={this.state.show} onHide={() => this.handleClose}>
-          <Modal.Header closeButton>
+          <Modal.Header id='header'>
             <Modal.Title>{this.state.mode} Task</Modal.Title>
           </Modal.Header>
           <Modal.Body>
@@ -127,10 +130,10 @@ export default class Dialogue extends React.Component {
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="primary" onClick={this.handleAddEdit}>
+            <Button variant="primary" id='submitButton' onClick={this.handleAddEdit}>
               {this.state.mode}
             </Button>
-            <Button variant="secondary" onClick={this.handleCancel}>
+            <Button variant="secondary" id='cancelButton' onClick={this.handleCancel}>
               Cancel
             </Button>
           </Modal.Footer>

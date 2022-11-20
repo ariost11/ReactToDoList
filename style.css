@@ -5,6 +5,8 @@ div {
 #header {
   background-color: #1560bd;
   margin: 0px;
+  color: white;
+  border: 0px;
 }
 
 #headerTitle {
@@ -29,13 +31,30 @@ div {
 
 #addButton {
   background-color: #2f82e7;
+  font-size: 16px;
   border: 0px;
-  box-shadow: 1px 1px #3385e9;
   width: 100%;
   float: right;
 }
 
+#submitButton {
+  background-color: #2f82e7;
+  width: 30%;
+  font-size: 16px;
+  border: 0px;
+}
+
+#cancelButton {
+  font-size: 16px;
+  width: 30%;
+  background-color: rgb(255, 67, 67);
+  border: 0px;
+}
+
 #updateButton {
+  background-color: #2f82e7;
+  font-size: 16px;
+  border: 0px;
   width: 100%;
   text-align: center;
   margin: auto;
@@ -43,7 +62,8 @@ div {
 
 #deleteButton {
   width: 100%;
-  background-color: red;
+  font-size: 16px;
+  background-color: rgb(255, 67, 67);
   border: 0px;
   text-align: center;
   margin: auto;
