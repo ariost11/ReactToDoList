@@ -45,7 +45,6 @@ export default class TaskTable extends React.Component {
     this.setState({
       tuples: this.state.tuples.map(a => a === tuple ? newArr : a)
     });
-    console.log(this.state.tuples);
   }
 
   render() {
