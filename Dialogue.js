@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Button, Modal, Form} from 'react-bootstrap';
+import moment from 'moment';
 
 export default class Dialogue extends React.Component {
   constructor(props) {
@@ -20,13 +21,21 @@ export default class Dialogue extends React.Component {
     this.loadTable = this.loadTable.bind(this);
     this.handleOpen = this.handleOpen.bind(this);
     this.resetValues = this.resetValues.bind(this);
+    this.updateDate = this.updateDate.bind(this);
+  }
+
+  updateDate(newDate) {
+    var time = moment(newDate.target.value).format('MM/DD/YYYY');
+    this.setState({
+      date: time
+    });
   }
 
   loadTable() {
     const ti = this.props.givenTuple[0];
-    const desc = this.props.givenTuple[1]
-    const dt = this.props.givenTuple[2]
-    const prio = this.props.givenTuple[3]
+    const desc = this.props.givenTuple[1];
+    const dt = this.props.givenTuple[2];
+    const prio = this.props.givenTuple[3];
     this.setState({
       title: ti,
       description: desc,
@@ -90,7 +99,7 @@ export default class Dialogue extends React.Component {
 
     return(
       <div>
-        <Button variant="primary" onClick={this.handleOpen}>
+        <Button variant="primary" onClick={this.handleOpen} id={this.props.id}>
           {this.props.name}
         </Button>
 
@@ -107,7 +116,7 @@ export default class Dialogue extends React.Component {
               </Form.Group>
               <Form.Group>
                 <Form.Text>Deadline</Form.Text>
-                <Form.Control value = {this.state.mode == 'Edit' ? this.state.date : null} type='date' onChange={(newDate) => this.setState({date: newDate.target.value})}/>
+                <Form.Control value = {this.state.mode == 'Edit' ? this.state.date : null} type='date' onChange={(newDate) => this.updateDate(newDate)}/>
               </Form.Group>
               <Form.Group>
                 <Form.Text>Priority <br/></Form.Text>

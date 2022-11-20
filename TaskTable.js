@@ -50,39 +50,39 @@ export default class TaskTable extends React.Component {
   render() {
     const list = this.state.tuples.map((tuple) =>
       <Row>
-        <Col sm md lg={{span: 2}}>{tuple[0]}</Col>
-        <Col sm md lg={{span: 2}}>{tuple[1]}</Col>
-        <Col sm md lg={{span: 2}}>{tuple[2]}</Col>
-        <Col sm md lg={{span: 2}}>{tuple[3]}</Col>
-        <Col sm md lg={{span: 2}}>
+        <Col sm md lg={{span: 2}} id='colValue'>{tuple[0]}</Col>
+        <Col sm md lg={{span: 2}} id='colValue'>{tuple[1]}</Col>
+        <Col sm md lg={{span: 2}} id='colValue'>{tuple[2]}</Col>
+        <Col sm md lg={{span: 2}} id='colValue'>{tuple[3]}</Col>
+        <Col sm md lg={{span: 2}} id='colValue'>
           <Form.Check inline name='completed' type='checkbox' onChange={() => this.swapComplete(tuple)}/>
         </Col>
         <Col sm md lg={{span: 2}}>
-          {!tuple[4] && <Dialogue name="UPDATE" givenTuple={tuple} fn={this.updateEntry}/>}
-          <Button onClick={() => this.deleteEntry(tuple)}>DELETE</Button>
+          {!tuple[4] && <Dialogue name="UPDATE" givenTuple={tuple} fn={this.updateEntry} id='updateButton'/>}
+          <Button onClick={() => this.deleteEntry(tuple)} id='deleteButton'>DELETE</Button>
         </Col>
       </Row>
     );
 
     return(
       <Card>
-        <Card.Header>
+        <Card.Header id='header'>
             <Row>
-              <Col md={{span: 6, offset: 5}}>FRAMEWORKS</Col>
-              <Col md={{span: 1}}><Dialogue fn={this.addToList} name='ADD'/></Col>
+              <Col md={{span: 10}} id='headerTitle'>FRAMEWORKS</Col>
+              <Col md={{span: 2}}><Dialogue fn={this.addToList} name='ADD' id='addButton'/></Col>
             </Row>
         </Card.Header>
         <Card.Body>
-          <Table>
+          <Table bordered>
             <thead>
               <tr>
                 <Row>
-                  <Col sm md lg={{span: 2}}>Title</Col>
-                  <Col sm md lg={{span: 2}}>Description</Col>
-                  <Col sm md lg={{span: 2}}>Deadline</Col>
-                  <Col sm md lg={{span: 2}}>Priority</Col>
-                  <Col sm md lg={{span: 2}}>Is Complete</Col>
-                  <Col sm md lg={{span: 2}}>Action</Col>
+                  <Col sm md lg={{span: 2}} id='colHeader'>Title</Col>
+                  <Col sm md lg={{span: 2}} id='colHeader'>Description</Col>
+                  <Col sm md lg={{span: 2}} id='colHeader'>Deadline</Col>
+                  <Col sm md lg={{span: 2}} id='colHeader'>Priority</Col>
+                  <Col sm md lg={{span: 2}} id='colHeader'>Is Complete</Col>
+                  <Col sm md lg={{span: 2}} id='colHeader'>Action</Col>
                 </Row>
               </tr>
             </thead>
