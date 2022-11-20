@@ -16,17 +16,22 @@ export default class Dialogue extends React.Component {
     this.handleShow = this.handleShow.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
-    this.handleAdd = this.handleAdd.bind(this);
+    this.handleAddEdit = this.handleAddEdit.bind(this);
     this.loadTable = this.loadTable.bind(this);
     this.handleOpen = this.handleOpen.bind(this);
+    this.resetValues = this.resetValues.bind(this);
   }
 
   loadTable() {
-    console.log(this.props.givenTuple);
+    const ti = this.props.givenTuple[0];
+    const desc = this.props.givenTuple[1]
+    const dt = this.props.givenTuple[2]
+    const prio = this.props.givenTuple[3]
     this.setState({
-      description: this.props.givenTuple[1],
-      date: this.props.givenTuple[2],
-      priority: this.probs.givenTuple[3]
+      title: ti,
+      description: desc,
+      date: dt,
+      priority: prio
     });
   }
 
@@ -50,14 +55,39 @@ export default class Dialogue extends React.Component {
 
   handleCancel() {
     this.handleClose();
+    this.resetValues();
   }
 
-  handleAdd() {
-    this.props.fn(this.state.title, this.state.description, this.state.date, this.state.priority);
+  handleAddEdit() {
+    if(this.state.mode == 'Add')
+      this.props.fn(this.state.title, this.state.description, this.state.date, this.state.priority);
+    else
+      this.props.fn(this.state.title, this.state.description, this.state.data, this.state.priority, this.props.givenTuple.complete, this.props.givenTuple.index);
     this.handleClose();
+    this.resetValues();
+  }
+
+  resetValues() {
+    this.setState ({
+      title: '',
+      description: '',
+      date: '',
+      priority: '',
+      complete: false
+    });
   }
 
   render() {
+    
+    let titleShow = <></>;
+    if(this.state.mode == 'Add') {
+      titleShow = 
+      <Form.Group>
+        <Form.Text>Title</Form.Text>
+        <Form.Control placeholder='Title' onChange={(newTitle) => this.setState({title: newTitle.target.value})}/>
+      </Form.Group>;
+    }
+
     return(
       <div>
         <Button variant="primary" onClick={this.handleOpen}>
@@ -70,22 +100,25 @@ export default class Dialogue extends React.Component {
           </Modal.Header>
           <Modal.Body>
             <Form>
-              <Form.Control placeholder='Title' onChange={(newTitle) => this.setState({title: newTitle.target.value})}/>
-              <Form.Control placeholder='Description' onChange={(desc) => this.setState({description: desc.target.value})}/>
+              {titleShow}
+              <Form.Group>
+                <Form.Text>Description</Form.Text>
+                <Form.Control value = {this.state.mode == 'Edit' ? this.state.description : null} placeholder='Description' onChange={(desc) => this.setState({description: desc.target.value})}/>
+              </Form.Group>
               <Form.Group>
                 <Form.Text>Deadline</Form.Text>
-                <Form.Control type='date' onChange={(newDate) => this.setState({date: newDate.target.value})}/>
+                <Form.Control value = {this.state.mode == 'Edit' ? this.state.date : null} type='date' onChange={(newDate) => this.setState({date: newDate.target.value})}/>
               </Form.Group>
               <Form.Group>
                 <Form.Text>Priority <br/></Form.Text>
-                <Form.Check inline name='priority' type='radio' label='Low' onChange={() => this.setState({priority: 'Low'})}/>
-                <Form.Check inline name='priority' type='radio' label='Med' onChange={() => this.setState({priority: 'Medium'})}/>
-                <Form.Check inline name='priority' type='radio' label='High' onChange={() => this.setState({priority: 'High'})}/>
+                <Form.Check inline checked = {this.state.mode == 'Edit' && this.state.priority == 'Low' ? true : false} name='priority' type='radio' label='Low' onChange={() => this.setState({priority: 'Low'})}/>
+                <Form.Check inline checked = {this.state.mode == 'Edit' && this.state.priority == 'Medium' ? true : false} name='priority' type='radio' label='Med' onChange={() => this.setState({priority: 'Medium'})}/>
+                <Form.Check inline checked = {this.state.mode == 'Edit' && this.state.priority == 'High' ? true : false} name='priority' type='radio' label='High' onChange={() => this.setState({priority: 'High'})}/>
               </Form.Group>
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="primary" onClick={this.handleAdd}>
+            <Button variant="primary" onClick={this.handleAddEdit}>
               {this.state.mode}
             </Button>
             <Button variant="secondary" onClick={this.handleCancel}>
