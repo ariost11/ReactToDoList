@@ -7,6 +7,10 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { Form, Button } from 'react-bootstrap';
 import moment from 'moment';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircleXmark, faBars } from '@fortawesome/free-solid-svg-icons';
+import toastr from 'toastr'
+import 'toastr/build/toastr.min.css'
 
 export default class TaskTable extends React.Component {
   constructor(props) {
@@ -19,12 +23,14 @@ export default class TaskTable extends React.Component {
     this.updateEntry = this.updateEntry.bind(this);
     this.deleteEntry = this.deleteEntry.bind(this);
     this.swapComplete = this.swapComplete.bind(this);
+    toastr.options.positionClass = 'toast-top-left';
   }
 
   addToList(title, description, date, priority) {
     this.setState({
       tuples: [...this.state.tuples, [title, description, date, priority, false, this.state.index++]]
     });
+    toastr.success('Task Added Successfully');
   }
 
   updateEntry(title, description, date, priority, complete, index) {
@@ -32,12 +38,14 @@ export default class TaskTable extends React.Component {
     this.setState({
       tuples: this.state.tuples.map(a => a[0] === title ? newArr : a)
     });
+    toastr.success('Task Updated Successfully');
   }
 
   deleteEntry(tuple) {
     this.setState({
       tuples: this.state.tuples.filter(item => item !== tuple)
     });
+    toastr.success('Task Deleted Successfully');
   }
 
   swapComplete(tuple) {
@@ -60,7 +68,10 @@ export default class TaskTable extends React.Component {
         </Col>
         <Col sm md lg={{span: 2}}>
           {!tuple[4] && <Dialogue name="UPDATE" givenTuple={tuple} fn={this.updateEntry} id='updateButton'/>}
-          <Button onClick={() => this.deleteEntry(tuple)} id='deleteButton'>DELETE</Button>
+          <Button onClick={() => this.deleteEntry(tuple)} id='deleteButton'>
+            <FontAwesomeIcon icon={faCircleXmark}/>
+            &nbsp;DELETE
+          </Button>
         </Col>
       </Row>
     );
@@ -69,7 +80,8 @@ export default class TaskTable extends React.Component {
       <Card>
         <Card.Header id='header'>
             <Row>
-              <Col md={{span: 10}} id='headerTitle'>FRAMEWORKS</Col>
+              <Col md={{span: 10}} id='headerTitle'><FontAwesomeIcon icon={faBars}/>
+              &nbsp;FRAMEWORKS</Col>
               <Col md={{span: 2}}><Dialogue fn={this.addToList} name='ADD' id='addButton'/></Col>
             </Row>
         </Card.Header>

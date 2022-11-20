@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { Button, Modal, Form} from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCirclePlus, faPenToSquare, faBan } from '@fortawesome/free-solid-svg-icons';
 
 export default class Dialogue extends React.Component {
   constructor(props) {
@@ -11,7 +13,11 @@ export default class Dialogue extends React.Component {
       date: '',
       priority: '',
       mode: this.props.name == 'ADD' ? 'Add' : 'Edit',
-      complete: false
+      complete: false,
+      titles: [],
+      titleEmptyValid: true,
+      titleDuplicateValid: true,
+      descValid: true
     }
     this.handleShow = this.handleShow.bind(this);
     this.handleClose = this.handleClose.bind(this);
@@ -21,6 +27,19 @@ export default class Dialogue extends React.Component {
     this.handleOpen = this.handleOpen.bind(this);
     this.resetValues = this.resetValues.bind(this);
     this.updateDate = this.updateDate.bind(this);
+    this.validateFields = this.validateFields.bind(this);
+  }
+
+  validateFields() {
+    this.setState({
+      titleEmptyValid: this.state.title != '',
+      descValid: this.state.description != '',
+      titleDuplicateValid: !this.state.titles.includes(this.state.title)
+    }, () => {
+      if(this.state.titleEmptyValid && this.state.descValid && this.state.titleDuplicateValid) {
+        this.handleAddEdit();
+      }
+    });
   }
 
   updateDate(newDate) {
@@ -28,7 +47,6 @@ export default class Dialogue extends React.Component {
     this.setState({
       date: time
     });
-    console.log(this.state.date);
   }
 
   loadTable() {
@@ -36,20 +54,18 @@ export default class Dialogue extends React.Component {
     const desc = this.props.givenTuple[1];
     const newDate = this.props.givenTuple[2];
     const prio = this.props.givenTuple[3];
-    console.log(newDate);
     this.setState({
       title: ti,
       description: desc,
       date: newDate,
       priority: prio
     });
-    console.log(this.state.date);
   }
 
   handleOpen() {
     if(this.state.mode == 'Edit')
       this.loadTable();
-
+    
     this.handleShow();
   }
 
@@ -76,6 +92,9 @@ export default class Dialogue extends React.Component {
     else
       this.props.fn(this.state.title, this.state.description, this.state.data, this.state.priority, this.props.givenTuple.complete, this.props.givenTuple.index);
 
+    this.setState({
+      titles: [...this.state.titles, this.state.title]
+    });
     this.handleClose();
     this.resetValues();
   }
@@ -86,7 +105,10 @@ export default class Dialogue extends React.Component {
       description: '',
       date: '',
       priority: '',
-      complete: false
+      complete: false,
+      titleEmptyValid: true,
+      titleDuplicateValid: true,
+      descValid: true
     });
   }
 
@@ -96,26 +118,34 @@ export default class Dialogue extends React.Component {
       titleShow = 
       <Form.Group>
         <Form.Text>Title</Form.Text>
-        <Form.Control placeholder='Title' onChange={(newTitle) => this.setState({title: newTitle.target.value})}/>
+        <Form.Control type='text' placeholder='Title' onChange={(newTitle) => this.setState({title: newTitle.target.value})} isInvalid={!this.state.titleEmptyValid || !this.state.titleDuplicateValid}/>
+        {!this.state.titleEmptyValid && <Form.Control.Feedback type='invalid'>Title is Required!</Form.Control.Feedback>}
+        {!this.state.titleDuplicateValid && <Form.Control.Feedback type='invalid'>Cannot have Duplicate Title!</Form.Control.Feedback>}
       </Form.Group>;
     }
 
     return(
       <div>
         <Button variant="primary" onClick={this.handleOpen} id={this.props.id}>
-          {this.props.name}
+          {this.state.mode == 'Add' && <FontAwesomeIcon icon={faCirclePlus}/>}
+          {this.state.mode == 'Edit' && <FontAwesomeIcon icon={faPenToSquare}/>}
+          &nbsp;{this.props.name}
         </Button>
 
         <Modal show={this.state.show} onHide={() => this.handleClose}>
           <Modal.Header id='header'>
-            <Modal.Title>{this.state.mode} Task</Modal.Title>
+            <Modal.Title>{this.state.mode == 'Add' && <FontAwesomeIcon icon={faCirclePlus}/>}
+              {this.state.mode == 'Edit' && <FontAwesomeIcon icon={faPenToSquare}/>}
+              &nbsp;
+              {this.state.mode} Task</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form>
               {titleShow}
               <Form.Group>
                 <Form.Text>Description</Form.Text>
-                <Form.Control value = {this.state.mode == 'Edit' ? this.state.description : null} placeholder='Description' onChange={(desc) => this.setState({description: desc.target.value})}/>
+                <Form.Control value = {this.state.mode == 'Edit' ? this.state.description : null} placeholder='Description' onChange={(desc) => this.setState({description: desc.target.value})} isInvalid={!this.state.descValid}/>
+                <Form.Control.Feedback type='invalid'>Description is Required!</Form.Control.Feedback>
               </Form.Group>
               <Form.Group>
                 <Form.Text>Deadline</Form.Text>
@@ -130,11 +160,14 @@ export default class Dialogue extends React.Component {
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="primary" id='submitButton' onClick={this.handleAddEdit}>
-              {this.state.mode}
+            <Button type='submit' variant="primary" id='submitButton' onClick={this.validateFields}>
+              {this.state.mode == 'Add' && <FontAwesomeIcon icon={faCirclePlus}/>}
+              {this.state.mode == 'Edit' && <FontAwesomeIcon icon={faPenToSquare}/>}
+              &nbsp;{this.state.mode == 'Add' ? 'ADD' : 'EDIT'}
             </Button>
             <Button variant="secondary" id='cancelButton' onClick={this.handleCancel}>
-              Cancel
+              <FontAwesomeIcon icon={faBan}/>
+              &nbsp;CANCEL
             </Button>
           </Modal.Footer>
         </Modal>

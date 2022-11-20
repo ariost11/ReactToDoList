@@ -18,7 +18,7 @@ div {
 
 #colHeader {
   color: gray;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: bold;
   text-align: center;
   margin: auto;
@@ -31,7 +31,7 @@ div {
 
 #addButton {
   background-color: #2f82e7;
-  font-size: 16px;
+  font-size: 14px;
   border: 0px;
   width: 100%;
   float: right;
@@ -40,12 +40,12 @@ div {
 #submitButton {
   background-color: #2f82e7;
   width: 30%;
-  font-size: 16px;
+  font-size: 14px;
   border: 0px;
 }
 
 #cancelButton {
-  font-size: 16px;
+  font-size: 14px;
   width: 30%;
   background-color: rgb(255, 67, 67);
   border: 0px;
@@ -53,7 +53,7 @@ div {
 
 #updateButton {
   background-color: #2f82e7;
-  font-size: 16px;
+  font-size: 14px;
   border: 0px;
   width: 100%;
   text-align: center;
@@ -62,7 +62,7 @@ div {
 
 #deleteButton {
   width: 100%;
-  font-size: 16px;
+  font-size: 14px;
   background-color: rgb(255, 67, 67);
   border: 0px;
   text-align: center;
