@@ -17,6 +17,7 @@ export default class TaskTable extends React.Component {
     this.addToList = this.addToList.bind(this);
     this.updateEntry = this.updateEntry.bind(this);
     this.deleteEntry = this.deleteEntry.bind(this);
+    this.swapComplete = this.swapComplete.bind(this);
   }
 
   addToList(title, description, date, priority) {
@@ -38,6 +39,15 @@ export default class TaskTable extends React.Component {
     });
   }
 
+  swapComplete(tuple) {
+    let newArr = tuple;
+    newArr[4] = !tuple[4];
+    this.setState({
+      tuples: this.state.tuples.map(a => a === tuple ? newArr : a)
+    });
+    console.log(this.state.tuples);
+  }
+
   render() {
     const list = this.state.tuples.map((tuple) =>
       <Row>
@@ -46,10 +56,10 @@ export default class TaskTable extends React.Component {
         <Col sm md lg={{span: 2}}>{tuple[2]}</Col>
         <Col sm md lg={{span: 2}}>{tuple[3]}</Col>
         <Col sm md lg={{span: 2}}>
-          <Form.Check inline name='completed' type='checkbox' onChange={() => tuple[4] = true}/>
+          <Form.Check inline name='completed' type='checkbox' onChange={() => this.swapComplete(tuple)}/>
         </Col>
         <Col sm md lg={{span: 2}}>
-          <Dialogue name="UPDATE" givenTuple={tuple} fn={this.updateEntry}/>
+          {!tuple[4] && <Dialogue name="UPDATE" givenTuple={tuple} fn={this.updateEntry}/>}
           <Button onClick={() => this.deleteEntry(tuple)}>DELETE</Button>
         </Col>
       </Row>
