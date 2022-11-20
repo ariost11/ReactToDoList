@@ -11,10 +11,9 @@ export default class Dialogue extends React.Component {
       title: '',
       description: '',
       date: '',
-      priority: '',
+      priority: 'Low',
       mode: this.props.name == 'ADD' ? 'Add' : 'Edit',
       complete: false,
-      titles: [],
       titleEmptyValid: true,
       titleDuplicateValid: true,
       descValid: true
@@ -28,13 +27,23 @@ export default class Dialogue extends React.Component {
     this.resetValues = this.resetValues.bind(this);
     this.updateDate = this.updateDate.bind(this);
     this.validateFields = this.validateFields.bind(this);
+    this.containsTitle = this.containsTitle.bind(this);
+  }
+
+  containsTitle(newTitle) {
+    let contained = false;
+    this.props.tuples.forEach(a => {
+      if(a.includes(newTitle))
+        contained = true;
+    });
+    return contained;
   }
 
   validateFields() {
     this.setState({
       titleEmptyValid: this.state.title != '',
       descValid: this.state.description != '',
-      titleDuplicateValid: !this.state.titles.includes(this.state.title)
+      titleDuplicateValid: (this.state.mode == 'Add' ? !this.containsTitle(this.state.title) : true)
     }, () => {
       if(this.state.titleEmptyValid && this.state.descValid && this.state.titleDuplicateValid) {
         this.handleAddEdit();
@@ -92,9 +101,6 @@ export default class Dialogue extends React.Component {
     else
       this.props.fn(this.state.title, this.state.description, this.state.data, this.state.priority, this.props.givenTuple.complete, this.props.givenTuple.index);
 
-    this.setState({
-      titles: [...this.state.titles, this.state.title]
-    });
     this.handleClose();
     this.resetValues();
   }
@@ -104,7 +110,7 @@ export default class Dialogue extends React.Component {
       title: '',
       description: '',
       date: '',
-      priority: '',
+      priority: 'Low',
       complete: false,
       titleEmptyValid: true,
       titleDuplicateValid: true,
@@ -153,9 +159,9 @@ export default class Dialogue extends React.Component {
               </Form.Group>
               <Form.Group>
                 <Form.Text>Priority <br/></Form.Text>
-                <Form.Check inline checked = {this.state.mode == 'Edit' && this.state.priority == 'Low' ? true : false} name='priority' type='radio' label='Low' onChange={() => this.setState({priority: 'Low'})}/>
-                <Form.Check inline checked = {this.state.mode == 'Edit' && this.state.priority == 'Medium' ? true : false} name='priority' type='radio' label='Med' onChange={() => this.setState({priority: 'Medium'})}/>
-                <Form.Check inline checked = {this.state.mode == 'Edit' && this.state.priority == 'High' ? true : false} name='priority' type='radio' label='High' onChange={() => this.setState({priority: 'High'})}/>
+                <Form.Check inline checked = {(this.state.mode == 'Add' && this.state.priority == 'Low') || (this.state.mode == 'Edit' && this.state.priority == 'Low') ? true : false} name='priority' type='radio' label='Low' onChange={() => this.setState({priority: 'Low'})}/>
+                <Form.Check inline checked = {(this.state.mode == 'Add' && this.state.priority == 'Med') || (this.state.mode == 'Edit' && this.state.priority) == 'Med' ? true : false} name='priority' type='radio' label='Med' onChange={() => this.setState({priority: 'Med'})}/>
+                <Form.Check inline checked = {(this.state.mode == 'Add' && this.state.priority == 'High') || (this.state.mode == 'Edit' && this.state.priority == 'High') ? true : false} name='priority' type='radio' label='High' onChange={() => this.setState({priority: 'High'})}/>
               </Form.Group>
             </Form>
           </Modal.Body>

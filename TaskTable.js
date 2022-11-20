@@ -56,6 +56,15 @@ export default class TaskTable extends React.Component {
     });
   }
 
+  containsTitle(title) {
+    let contained = false;
+    this.state.tuples.forEach(a => {
+      if(a.includes(title))
+        contained = true;
+    });
+    return contained;
+  }
+
   render() {
     const list = this.state.tuples.map((tuple) =>
       <Row>
@@ -82,7 +91,7 @@ export default class TaskTable extends React.Component {
             <Row>
               <Col md={{span: 10}} id='headerTitle'><FontAwesomeIcon icon={faBars}/>
               &nbsp;FRAMEWORKS</Col>
-              <Col md={{span: 2}}><Dialogue fn={this.addToList} name='ADD' id='addButton'/></Col>
+              <Col md={{span: 2}}><Dialogue fn={this.addToList} name='ADD' id='addButton' tuples={this.state.tuples}/></Col>
             </Row>
         </Card.Header>
         <Card.Body>
