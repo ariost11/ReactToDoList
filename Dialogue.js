@@ -53,8 +53,10 @@ export default class Dialogue extends React.Component {
 
   updateDate(newDate) {
     var time = newDate.target.value;
-    this.setState({
-      date: time
+    this.setState((state) => {
+      return {
+        date: time
+      }
     });
   }
 
@@ -63,11 +65,13 @@ export default class Dialogue extends React.Component {
     const desc = this.props.givenTuple[1];
     const newDate = this.props.givenTuple[2];
     const prio = this.props.givenTuple[3];
-    this.setState({
-      title: ti,
-      description: desc,
-      date: newDate,
-      priority: prio
+    this.setState((state) => {
+      return {
+        title: ti,
+        description: desc,
+        date: newDate,
+        priority: prio
+      }
     });
   }
 
