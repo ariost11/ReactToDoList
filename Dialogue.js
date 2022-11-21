@@ -24,8 +24,7 @@ export default class Dialogue extends React.Component {
     this.handleAddEdit = this.handleAddEdit.bind(this);
     this.loadTable = this.loadTable.bind(this);
     this.handleOpen = this.handleOpen.bind(this);
-    this.resetValues = this.resetValues.bind(this);
-    this.updateDate = this.updateDate.bind(this);
+    this.resetValues = this.resetValues.bind(this)
     this.validateFields = this.validateFields.bind(this);
     this.containsTitle = this.containsTitle.bind(this);
   }
@@ -47,15 +46,6 @@ export default class Dialogue extends React.Component {
     }, () => {
       if(this.state.titleEmptyValid && this.state.descValid && this.state.titleDuplicateValid) {
         this.handleAddEdit();
-      }
-    });
-  }
-
-  updateDate(newDate) {
-    var time = newDate.target.value;
-    this.setState((state) => {
-      return {
-        date: time
       }
     });
   }
@@ -103,7 +93,7 @@ export default class Dialogue extends React.Component {
     if(this.state.mode == 'Add')
       this.props.fn(this.state.title, this.state.description, this.state.date, this.state.priority);
     else
-      this.props.fn(this.state.title, this.state.description, this.state.data, this.state.priority, this.props.givenTuple.complete, this.props.givenTuple.index);
+      this.props.fn(this.state.title, this.state.description, this.state.date, this.state.priority, this.props.givenTuple.complete, this.props.givenTuple.index);
 
     this.handleClose();
     this.resetValues();
@@ -159,7 +149,7 @@ export default class Dialogue extends React.Component {
               </Form.Group>
               <Form.Group>
                 <Form.Text>Deadline</Form.Text>
-                <Form.Control value = {this.state.mode == 'Edit' ? this.state.date : null} type='date' onChange={(newDate) => this.updateDate(newDate)}/>
+                <Form.Control value = {this.state.mode == 'Edit' ? this.state.date : null} type='date' onChange={(newDate) => this.setState({date: newDate.target.value})}/>
               </Form.Group>
               <Form.Group>
                 <Form.Text>Priority <br/></Form.Text>
